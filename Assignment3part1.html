@@ -1,0 +1,376 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment3part1</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-26"><meta name="DC.source" content="Assignment3part1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clear <span class="string">variables</span>
+<span class="comment">%define constants</span>
+m = 9.1e-31;
+k = 1.381e-23;
+T = 300;
+np = 200000; <span class="comment">%To give density of 10^15 per cm squared asked for in outline</span>
+<span class="comment">%Width Length of system &amp; starting positions</span>
+L = 200e-9;
+W = 100e-9;
+xp = rand(np,1)*L;
+yp = rand(np,1)*W;
+<span class="comment">%velocity vectors and std</span>
+vxstd = 0.5;
+vx = sqrt(2*k*T/m)*randn(np,1)*vxstd;
+vy = sqrt(2*k*T/m)*randn(np,1)*vxstd;
+
+<span class="comment">%%Ex = 0.1V/(200*10^-9m)</span>
+<span class="comment">%%Ex = 500000V/m</span>
+Ex = 500000;
+
+<span class="comment">%%elementary charge</span>
+q = 1.602e-19;
+
+<span class="comment">%%qE = ma --&gt; a=qE/m</span>
+a = q*Ex/m;
+
+dt = 5e-15;
+
+dv = a*dt
+
+<span class="keyword">for</span> t = 1:200
+    tv(t) = t;
+    VV = (vx + dv*t);
+    x = xp + VV*dt;
+    y = yp + vy*dt;
+    <span class="comment">%logical indexing of x boundaries</span>
+    ix = x &gt; 200e-9;
+    x(ix) = x(ix)-200e-9;
+    ux = x &lt; 0 ;
+    x(ux) = x(ux) +200e-9;
+    <span class="comment">%logical indexing of x boundaries</span>
+    iy = y &gt; 100e-9 ;
+    vy(iy) = -vy(iy);
+    uy = y &lt; 0 ;
+    vy(uy) = -vy(uy);
+<span class="comment">%     probability of scattering</span>
+    Pscat = (1-exp(-dt/0.2e-12));
+    scat = rand(np,1);
+    iscat = scat&lt;Pscat;
+    nones = nnz(iscat);
+<span class="comment">%     generate new velocity if scattered</span>
+    vx(iscat) = sqrt(2*k*T/m)*randn(nones,1)*vxstd;
+    vy(iscat) = sqrt(2*k*T/m)*randn(nones,1)*vxstd;
+
+    <span class="comment">%Positive current contribution</span>
+    Ipos = nnz(ix);
+
+    <span class="comment">%%Negative contribution to current</span>
+    Ineg = nnz(ux);
+
+    <span class="comment">%%Current Calculation</span>
+    current(t) = (Ipos-Ineg)*q/dt;
+    time(t)= t;
+
+    figure(1)
+    plot(x(1:20000:end),y(1:20000:end),<span class="string">'o'</span>);
+    grid <span class="string">on</span>
+    hold <span class="string">on</span>
+    title(<span class="string">'Electron Mapping'</span>)
+    xlabel(<span class="string">'x Position, x (m)'</span>)
+    ylabel(<span class="string">'Y Position, y (m)'</span>)
+    axis ([0 L 0 W])
+
+
+    msv = mean(vx.^2 + vy.^2);
+    temp(t) = (m*msv/(k));
+    <span class="comment">%figure(2)</span>
+    <span class="comment">%plot(tv,temp)</span>
+    <span class="comment">%title('Temperature vs. Time')</span>
+    <span class="comment">%xlabel('Time')</span>
+    <span class="comment">%ylabel('Temperature(C)')</span>
+
+
+    xp = x;
+    yp = y;
+
+    pause(0.1)
+<span class="keyword">end</span>
+
+figure (2)
+plot(time,current)
+title(<span class="string">'Current Vs. Time'</span>)
+ylabel(<span class="string">'Current (A)'</span>)
+xlabel(<span class="string">'Time (s)'</span>)
+
+    <span class="comment">%logical indexing for density and temp plot</span>
+    <span class="keyword">for</span> ii = 1:10
+        dx = L/10;
+        <span class="comment">%cell boundaries</span>
+        x1 = (ii-1)*dx;
+        x2 = x1 + dx;
+
+        Ix = x &gt; x1 &amp; x &lt; x2;
+
+        <span class="keyword">for</span> jj = 1:5
+            dy = W/5;
+            <span class="comment">%cell boundaries</span>
+            y1 = (jj-1)*dy;
+            y2 = y1 + dy;
+
+            Iy = y &gt; y1 &amp; y &lt; y2;
+            <span class="comment">%particles in cell</span>
+            Ixy = Ix&amp;Iy;
+            <span class="comment">%positions</span>
+            xpa = x(Ixy);
+            ypa = y(Ixy);
+            <span class="comment">%velocities</span>
+            vxpa = vx(Ixy);
+            vypa = vy(Ixy);
+            <span class="comment">% number of particles in cell</span>
+            npa = length(xpa);
+
+            <span class="keyword">if</span> npa == 0
+                Temp(ii,jj) = 300;
+                <span class="comment">%density plot</span>
+                elecdense(ii,jj)= npa./(W*L);
+            <span class="keyword">else</span>
+                <span class="comment">%temp plot</span>
+                Temp(ii,jj) = m*sum(vxpa.^2 + vypa.^2)/(2*k*npa);
+                elecdense(ii,jj)= npa./(W*L);
+
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    figure(4)
+    pcolor(Temp)
+    title(<span class="string">'Surface Temperature Plot'</span>)
+    zlabel(<span class="string">'Temperature (C)'</span>)
+    xlabel(<span class="string">'Divisions of 20x10^-9 (meters)'</span>)
+    ylabel(<span class="string">'Divisions of 20x10^-9 (meters)'</span>)
+
+    figure (5)
+    pcolor(elecdense)
+    title(<span class="string">'Electron Density Map'</span>)
+    zlabel(<span class="string">' e- Density (e-/m^2)'</span>)
+    xlabel(<span class="string">'Divisions of 20x10^-9 (meters)'</span>)
+    ylabel(<span class="string">'Divisions of 20x10^-9 (meters)'</span>)
+</pre><pre class="codeoutput">
+dv =
+
+  440.1099
+
+</pre><img vspace="5" hspace="5" src="Assignment3part1_01.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part1_02.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part1_03.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part1_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear variables
+%define constants
+m = 9.1e-31;
+k = 1.381e-23;
+T = 300;
+np = 200000; %To give density of 10^15 per cm squared asked for in outline
+%Width Length of system & starting positions
+L = 200e-9;
+W = 100e-9;
+xp = rand(np,1)*L;
+yp = rand(np,1)*W;
+%velocity vectors and std
+vxstd = 0.5;
+vx = sqrt(2*k*T/m)*randn(np,1)*vxstd;
+vy = sqrt(2*k*T/m)*randn(np,1)*vxstd;
+
+%%Ex = 0.1V/(200*10^-9m)
+%%Ex = 500000V/m
+Ex = 500000;
+
+%%elementary charge
+q = 1.602e-19;
+
+%%qE = ma REPLACE_WITH_DASH_DASH> a=qE/m
+a = q*Ex/m;
+
+dt = 5e-15;
+
+dv = a*dt
+
+for t = 1:200
+    tv(t) = t;
+    VV = (vx + dv*t);
+    x = xp + VV*dt; 
+    y = yp + vy*dt;
+    %logical indexing of x boundaries
+    ix = x > 200e-9;
+    x(ix) = x(ix)-200e-9;
+    ux = x < 0 ;
+    x(ux) = x(ux) +200e-9;
+    %logical indexing of x boundaries
+    iy = y > 100e-9 ;
+    vy(iy) = -vy(iy);
+    uy = y < 0 ;
+    vy(uy) = -vy(uy);
+%     probability of scattering
+    Pscat = (1-exp(-dt/0.2e-12));
+    scat = rand(np,1);
+    iscat = scat<Pscat;
+    nones = nnz(iscat);
+%     generate new velocity if scattered
+    vx(iscat) = sqrt(2*k*T/m)*randn(nones,1)*vxstd;
+    vy(iscat) = sqrt(2*k*T/m)*randn(nones,1)*vxstd;
+    
+    %Positive current contribution 
+    Ipos = nnz(ix);
+    
+    %%Negative contribution to current 
+    Ineg = nnz(ux);
+    
+    %%Current Calculation 
+    current(t) = (Ipos-Ineg)*q/dt;
+    time(t)= t;
+    
+    figure(1)
+    plot(x(1:20000:end),y(1:20000:end),'o');
+    grid on
+    hold on
+    title('Electron Mapping')
+    xlabel('x Position, x (m)')
+    ylabel('Y Position, y (m)')
+    axis ([0 L 0 W])
+    
+    
+    msv = mean(vx.^2 + vy.^2);
+    temp(t) = (m*msv/(k));
+    %figure(2)
+    %plot(tv,temp)
+    %title('Temperature vs. Time')
+    %xlabel('Time')
+    %ylabel('Temperature(C)')
+    
+    
+    xp = x;
+    yp = y;
+    
+    pause(0.1)
+end
+
+figure (2)
+plot(time,current)
+title('Current Vs. Time')
+ylabel('Current (A)')
+xlabel('Time (s)')
+
+    %logical indexing for density and temp plot 
+    for ii = 1:10
+        dx = L/10;
+        %cell boundaries 
+        x1 = (ii-1)*dx;
+        x2 = x1 + dx;
+       
+        Ix = x > x1 & x < x2;
+        
+        for jj = 1:5
+            dy = W/5;
+            %cell boundaries
+            y1 = (jj-1)*dy;
+            y2 = y1 + dy;
+            
+            Iy = y > y1 & y < y2;
+            %particles in cell 
+            Ixy = Ix&Iy;
+            %positions
+            xpa = x(Ixy);
+            ypa = y(Ixy);
+            %velocities
+            vxpa = vx(Ixy);
+            vypa = vy(Ixy);
+            % number of particles in cell
+            npa = length(xpa);
+            
+            if npa == 0
+                Temp(ii,jj) = 300;
+                %density plot 
+                elecdense(ii,jj)= npa./(W*L);
+            else
+                %temp plot 
+                Temp(ii,jj) = m*sum(vxpa.^2 + vypa.^2)/(2*k*npa);
+                elecdense(ii,jj)= npa./(W*L);
+                
+            end
+        end 
+    end 
+    
+    figure(4)
+    pcolor(Temp)
+    title('Surface Temperature Plot')
+    zlabel('Temperature (C)')
+    xlabel('Divisions of 20x10^-9 (meters)')
+    ylabel('Divisions of 20x10^-9 (meters)')  
+    
+    figure (5)
+    pcolor(elecdense)
+    title('Electron Density Map')
+    zlabel(' e- Density (e-/m^2)')
+    xlabel('Divisions of 20x10^-9 (meters)')
+    ylabel('Divisions of 20x10^-9 (meters)')
+    
+    
+
+##### SOURCE END #####
+--></body></html>
