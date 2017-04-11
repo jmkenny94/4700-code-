@@ -1,0 +1,317 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment3part2</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-26"><meta name="DC.source" content="Assignment3part2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">sigma plot</a></li></ul></div><pre class="codeinput"><span class="comment">%%Length of System</span>
+L = 200e-9
+
+<span class="comment">%%Width of System</span>
+W = 100e-9;
+
+<span class="comment">%%Number of Elements</span>
+Nx = 30
+Ny = 20
+
+<span class="comment">%%Initial Voltage</span>
+Vo = 0.1
+
+<span class="comment">%%Discretize Xspace</span>
+xvec = linspace(0,L,Nx); <span class="comment">%%start at 0, increment to L, length of vector is N</span>
+dx = xvec(2)-xvec(1);
+
+<span class="comment">%%Discretize Yspace</span>
+yvec = linspace(0,W,Ny);
+dy = yvec(2)-yvec(1);
+
+<span class="comment">%%Allocate memory for voltage</span>
+V = zeros(length(xvec),length(yvec));
+</pre><pre class="codeoutput">
+L =
+
+   2.0000e-07
+
+
+Nx =
+
+    30
+
+
+Ny =
+
+    20
+
+
+Vo =
+
+    0.1000
+
+</pre><h2 id="2">sigma plot</h2><pre class="codeinput"><span class="keyword">for</span> idx = 1:Nx
+    <span class="keyword">for</span> idy = 1:Ny
+        x = xvec(idx);
+        y = yvec(idy);
+        <span class="keyword">if</span> x &gt; 80e-9 &amp; x &lt; 120e-9 &amp; y &gt; -1 &amp; y &lt; 25e-9
+            sigma(idx,idy) = 0.01;
+        <span class="keyword">elseif</span> x &gt; 80e-9 &amp; x &lt; 120e-9 &amp; y &gt; 75e-9 &amp; y &lt; 110e-9
+            sigma(idx,idy) = 0.01;
+        <span class="keyword">else</span>
+            sigma(idx,idy) = 1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+R0 = 1./sigma;
+
+<span class="comment">%%Set up 4 resistor network for each point</span>
+<span class="keyword">for</span> idx = 2:Nx-1
+    <span class="keyword">for</span> idy = 2:Ny-1
+        R(idx,idy,1) = (R0(idx-1,idy)+R0(idx,idy))/2;
+        R(idx,idy,2) = (R0(idx+1,idy)+R0(idx,idy))/2;
+        R(idx,idy,3) = (R0(idx,idy+1)+R0(idx,idy))/2;
+        R(idx,idy,4) = (R0(idx,idy-1)+R0(idx,idy))/2;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%%initialize BCs</span>
+V(1,:) = Vo;
+
+
+<span class="comment">%%For loop to calculate V</span>
+<span class="keyword">for</span> n = 1:1000
+    <span class="keyword">for</span> idy = 1:Ny
+        <span class="keyword">for</span> idx = 2:Nx-1
+            <span class="keyword">if</span> idy == 1
+                V(idx,idy) = V(idx,idy+1);
+            <span class="keyword">elseif</span> idy == Ny
+                V(idx,idy) = V(idx,idy-1);
+            <span class="keyword">else</span>
+                V(idx,idy) = ((((V(idx-1,idy))/R(idx,idy,1))+<span class="keyword">...</span>
+                    ((V(idx+1,idy))/R(idx,idy,2))+(V(idx,idy+1))<span class="keyword">...</span>
+                    /R(idx,idy,3))+((V(idx,idy-1))/R(idx,idy,4)))/<span class="keyword">...</span>
+                    ((1/R(idx,idy,1))+(1/R(idx,idy,2))+(1/R(idx,idy,3))+(1/R(idx,idy,4)));
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="comment">%%Sigma Plot</span>
+figure(1)
+surf(sigma)
+title(<span class="string">'Sigma Plot'</span>)
+xlabel(<span class="string">'X position (m)'</span>)
+ylabel(<span class="string">'Y position (m)'</span>)
+zlabel(<span class="string">'Sigma Value (1/R)'</span>)
+
+<span class="comment">%%Resistance Plot</span>
+figure(2)
+surf(R0)
+title(<span class="string">'Resistance Plot'</span>)
+xlabel(<span class="string">'X position (m)'</span>)
+ylabel(<span class="string">'Y position (m)'</span>)
+zlabel(<span class="string">'Resistance (ohms)'</span>)
+
+
+<span class="comment">%E fields</span>
+[ey,ex] = gradient(-V);
+
+[xx,yy] = meshgrid(yvec,xvec);
+
+<span class="comment">%%Electric Fields Plot</span>
+figure (3)
+contour(xx,yy,V)
+hold <span class="string">on</span>
+quiver(yvec,xvec,ey,ex)
+hold <span class="string">off</span>
+title(<span class="string">'Electric Field Plot (Gradient(-V))(V/m)'</span>)
+xlabel(<span class="string">'Y position (m)'</span>)
+ylabel (<span class="string">'X position (m)'</span>)
+
+
+figure (4)
+surface(V)
+title(<span class="string">'Potential Surface Plot'</span>)
+xlabel(<span class="string">'X Direction'</span>)
+ylabel(<span class="string">'Y Direction'</span>)
+zlabel(<span class="string">'Potential (V)'</span>)
+</pre><img vspace="5" hspace="5" src="Assignment3part2_01.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part2_02.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part2_03.png" alt=""> <img vspace="5" hspace="5" src="Assignment3part2_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%Length of System
+L = 200e-9
+
+%%Width of System
+W = 100e-9;
+
+%%Number of Elements
+Nx = 30
+Ny = 20
+
+%%Initial Voltage
+Vo = 0.1
+
+%%Discretize Xspace
+xvec = linspace(0,L,Nx); %%start at 0, increment to L, length of vector is N
+dx = xvec(2)-xvec(1);
+
+%%Discretize Yspace
+yvec = linspace(0,W,Ny);
+dy = yvec(2)-yvec(1);
+
+%%Allocate memory for voltage
+V = zeros(length(xvec),length(yvec));
+
+%% sigma plot
+for idx = 1:Nx
+    for idy = 1:Ny
+        x = xvec(idx);
+        y = yvec(idy);
+        if x > 80e-9 & x < 120e-9 & y > -1 & y < 25e-9
+            sigma(idx,idy) = 0.01;
+        elseif x > 80e-9 & x < 120e-9 & y > 75e-9 & y < 110e-9
+            sigma(idx,idy) = 0.01;
+        else
+            sigma(idx,idy) = 1;
+        end
+    end
+end
+
+R0 = 1./sigma;
+
+%%Set up 4 resistor network for each point
+for idx = 2:Nx-1
+    for idy = 2:Ny-1
+        R(idx,idy,1) = (R0(idx-1,idy)+R0(idx,idy))/2;
+        R(idx,idy,2) = (R0(idx+1,idy)+R0(idx,idy))/2;
+        R(idx,idy,3) = (R0(idx,idy+1)+R0(idx,idy))/2;
+        R(idx,idy,4) = (R0(idx,idy-1)+R0(idx,idy))/2;
+    end
+end
+
+%%initialize BCs
+V(1,:) = Vo;
+
+
+%%For loop to calculate V 
+for n = 1:1000
+    for idy = 1:Ny 
+        for idx = 2:Nx-1 
+            if idy == 1
+                V(idx,idy) = V(idx,idy+1);
+            elseif idy == Ny
+                V(idx,idy) = V(idx,idy-1);
+            else
+                V(idx,idy) = ((((V(idx-1,idy))/R(idx,idy,1))+...
+                    ((V(idx+1,idy))/R(idx,idy,2))+(V(idx,idy+1))...
+                    /R(idx,idy,3))+((V(idx,idy-1))/R(idx,idy,4)))/...
+                    ((1/R(idx,idy,1))+(1/R(idx,idy,2))+(1/R(idx,idy,3))+(1/R(idx,idy,4)));
+            end
+        end
+    end
+end
+
+
+%%Sigma Plot 
+figure(1)
+surf(sigma)
+title('Sigma Plot')
+xlabel('X position (m)')
+ylabel('Y position (m)')
+zlabel('Sigma Value (1/R)')
+
+%%Resistance Plot 
+figure(2)
+surf(R0)
+title('Resistance Plot')
+xlabel('X position (m)')
+ylabel('Y position (m)')
+zlabel('Resistance (ohms)')
+
+
+%E fields 
+[ey,ex] = gradient(-V);
+
+[xx,yy] = meshgrid(yvec,xvec);
+
+%%Electric Fields Plot 
+figure (3)
+contour(xx,yy,V)
+hold on
+quiver(yvec,xvec,ey,ex)
+hold off
+title('Electric Field Plot (Gradient(-V))(V/m)')
+xlabel('Y position (m)')
+ylabel ('X position (m)')
+
+
+figure (4)
+surface(V)
+title('Potential Surface Plot')
+xlabel('X Direction')
+ylabel('Y Direction')
+zlabel('Potential (V)')
+
+##### SOURCE END #####
+--></body></html>
